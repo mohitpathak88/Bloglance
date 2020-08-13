@@ -1,5 +1,6 @@
 {% extends "myblog/base.html" %}
 {% block content %}
+    <h1 class="mb-3"> Posts by {{ view.kwargs.username}} ({{ page_obj.paginator.count }})</h1>       <!-- it Will get the username that is passed in the url and the user's total number of posts-->
     {% for post in posts %}
         <article class="media content-section">
             <img class="rounded-circle article-img"  src="{{ post.author.profile.image.url }}"  width="70" height="70">
@@ -22,9 +23,9 @@
       {% endif %}
 
     {% for num in page_obj.paginator.page_range %}
-      {% if page_obj.number == num %}           <!-- To check if we are on the current page-->
+      {% if page_obj.number == num %}
         <a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
-      {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}         <!-- TO display surrounding 3 pages-->
+      {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
         <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
       {% endif %}
     {% endfor %}

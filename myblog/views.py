@@ -1,5 +1,6 @@
-from django.shortcuts import render
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin 
+from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.models import User
 from django.views.generic import (
     ListView,
     DetailView,
@@ -21,6 +22,18 @@ class PostListView(ListView):
     template_name = 'myblog/home.html'        #By creating the list view, the class by default look into this path -> <app>/<model>_<modeltype>.html <- Therefore we need to change the path
     context_object_name = 'posts'           #'posts' would be a variable that will loop over all the items in the template 
     ordering = ['-date_posted']             #Changes the order of the list, with recent post on the top
+    paginate_by = 5
+
+
+class UserPostListView(ListView):
+    model = Post                                                #template - user_posts.html
+    template_name = 'myblog/user_posts.html'
+    context_object_name = 'posts'
+    paginate_by = 5
+
+    def get_queryset(self):                     # to filter all the posts
+        user = get_object_or_404(User, username=self.kwargs.get('username'))        #it will get the username through URL in 'user' variable... If the user exist it will display data otherwise would give a 404 error
+        return Post.objects.filter(author=user).order_by('-date_posted')            # it will return the posts only with author = user that we got 
 
 
 class PostDetailView(DetailView):
