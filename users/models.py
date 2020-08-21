@@ -10,8 +10,8 @@ class Profile(models.Model):
         return f'{self.user.username} Profile'
 
     
-    def save(self):         #this method runs after our model is saved. This method we are creating are our own so we can add some functionality
-        super().save()
+    def save(self, *args, **kawrgs):         #this method runs after our model is saved. This method we are creating are our own so we can add some functionality
+        super().save(*args, **kawrgs)
 
         img = Image.open(self.image.path)
 
